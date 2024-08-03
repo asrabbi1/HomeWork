@@ -60,7 +60,7 @@ def todo_detail(request, id):
         return Response(serializer.errors, sttaus=status.HTTP_400_BAD_REQUEST)
    
    
-    if request.method == 'DELETE':
+    elif request.method == 'DELETE':
         todo.delete()
         message={"success:Todo has been deleted successfully"}
         return Response(message, status=status.HTTP_204_NO_CONTENT)
