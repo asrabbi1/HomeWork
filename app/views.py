@@ -3,7 +3,8 @@ from .models import *
 from .serializers import *
 from .pagination import *
 from rest_framework import status
-from rest_framework.decorators import api_view
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 
 # Create your views here.
@@ -22,6 +23,7 @@ def index(request):
     persons=[person1,person2]
     return Response(persons)
 @api_view(['GET','POST'])
+@permission_classes([IsAuthenticated])
 def todo_list(request):
     todos=Todo.objects.all()
     if request.method == 'GET':
@@ -35,6 +37,7 @@ def todo_list(request):
     
     elif request.method == 'POST':
         data=request.data
+        data['created_by']=request.user.id
         serializer=TodoCreateSerializer(data=data)
         if serializer.is_valid():
             serializer.save()
